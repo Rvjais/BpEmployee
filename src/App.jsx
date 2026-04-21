@@ -24,7 +24,10 @@ function App() {
     const fetchData = async () => {
       try {
         const res = await fetch('/api/employees');
-        if (!res.ok) throw new Error(`Server returned ${res.status}`);
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}));
+          throw new Error(errorData.error || `Server returned ${res.status}`);
+        }
         
         const data = await res.json();
         if (Array.isArray(data)) {
