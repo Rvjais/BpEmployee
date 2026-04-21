@@ -1,7 +1,9 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-require('dotenv').config();
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 app.use(cors());
@@ -15,11 +17,9 @@ let isConnected = false;
 
 async function connectToDatabase() {
   if (isConnected) {
-    console.log('=> Using existing database connection');
     return;
   }
 
-  console.log('=> Creating new database connection');
   try {
     await mongoose.connect(MONGODB_URI);
     isConnected = true;
@@ -63,7 +63,7 @@ app.get('/api/employees', async (req, res) => {
 });
 
 app.post('/api/employees/:id/vote', async (req, res) => {
-  const { direction } = req.body; // 'right' for positive, 'left' for negative
+  const { direction } = req.body;
   const increment = direction === 'right' ? 1 : -1;
 
   try {
@@ -79,7 +79,4 @@ app.post('/api/employees/:id/vote', async (req, res) => {
   }
 });
 
-module.exports = app;
-// app.listen(PORT, () => {
-//   console.log(`Server running on port ${PORT}`);
-// });
+export default app;
